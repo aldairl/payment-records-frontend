@@ -60,6 +60,7 @@ export const RegisterPaymentContainer = () => {
     useEffect(() => {
         if (paymentCreated) {
             setOpenDialog(true)
+            initialValues.concepts = []
         }
 
     }, [paymentCreated])
