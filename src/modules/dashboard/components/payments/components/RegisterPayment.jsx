@@ -18,7 +18,7 @@ export const RegisterPayment = ({
             <Card >
                 <CardContent>
                     <Formik
-                        onSubmit={handleFormSubmit}
+                        onSubmit={(values, { resetForm }) => handleFormSubmit(values, resetForm)}
                         initialValues={initialValues}
                         validationSchema={checkoutSchema}
                     >

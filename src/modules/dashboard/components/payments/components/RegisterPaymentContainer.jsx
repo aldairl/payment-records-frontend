@@ -20,6 +20,7 @@ export const RegisterPaymentContainer = () => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [resetFormAction, setResetFormAction] = useState()
     const { payer, box, loading, paymentCreated } = useSelector(state => state.payment)
     const { beneficiarySelected } = useSelector(state => state.beneficiary)
     const { conceptList } = useSelector(state => state.dash)
@@ -33,16 +34,23 @@ export const RegisterPaymentContainer = () => {
         concepts: []
     }
 
-    const handleFormSubmit = (values) => {
+    const handleFormSubmit = (values, resetForm) => {
         console.log(values)
         const amount = values.concepts.reduce((total, current) => total + current.amount, 0)
         const newPayment = { ...values, amount }
         dispatch(createPayment(newPayment))
+
+        if (!resetFormAction) {
+            setResetFormAction(resetForm)
+        }
     }
 
     const handleCloseDialog = () => {
         console.log(paymentCreated)
         setOpenDialog(false)
+        if(resetFormAction){
+            resetFormAction()
+        }
     }
 
     const handleNewPayment = () => {
@@ -60,7 +68,6 @@ export const RegisterPaymentContainer = () => {
     useEffect(() => {
         if (paymentCreated) {
             setOpenDialog(true)
-            initialValues.concepts = []
         }
 
     }, [paymentCreated])
