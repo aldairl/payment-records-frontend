@@ -18,7 +18,6 @@ export const boxSlice = createSlice({
             state.boxes = payload
             state.loading = false
             state.error = ''
-            state.years = payload.map(box => new Date(box.creation_date).getFullYear())
         },
         setYears: (state, { payload }) => {
             state.years = payload

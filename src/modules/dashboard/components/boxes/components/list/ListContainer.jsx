@@ -4,16 +4,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteBox, getBoxes, getPaymentDetailsByBox } from '../../store/thunks'
 import { useNavigate } from 'react-router-dom'
 import { setBox } from '../../../payments/store/paymentSlice'
+import { clean } from '../../../user/storage/beneficiarySlice'
+import { clean as cleanPayments } from '../../../payments/store/paymentSlice'
 
 export const ListContainer = () => {
-  const { boxes, loading, error, years } = useSelector(state => state.box)
+  const { boxes, loading, error } = useSelector(state => state.box)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [boxLoaded, setBoxLoaded] = useState(false)
   const [dialogDelete, setDialogDelete] = useState(false)
   const [boxToDelete, setBoxToDelete] = useState(null)
 
-  const [yearSelected, setYearSelected] = useState('')
+  const currentYear = new Date().getFullYear()
+  const [yearSelected, setYearSelected] = useState(currentYear)
+  const years = [ currentYear - 1, currentYear, currentYear -2 ]
 
   const handlerCloseBox = () => {
     console.log('cerrar caja')
@@ -32,6 +36,8 @@ export const ListContainer = () => {
   const handleChangeYearSelected = ({ target }) => {
     setYearSelected(target.value)
     console.log('seleccionar año', target.value)
+    dispatch(getBoxes(target.value))
+    setBoxLoaded(true)
   }
 
   const viewBoxPayments = (boxId) => {
@@ -67,6 +73,13 @@ export const ListContainer = () => {
     }
 
   }, [yearSelected, boxes, dispatch, boxLoaded])
+
+  useEffect(()=>{
+    // clean old status of payers
+    dispatch(clean())
+    //clean old payments
+    dispatch(cleanPayments())
+  }, [])
 
 
   return (

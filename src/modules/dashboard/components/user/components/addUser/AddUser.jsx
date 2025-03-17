@@ -10,7 +10,7 @@ export const AddUser = ({ handleFormSubmit, initialValues, checkoutSchema, loadi
     <Box sx={{ padding: 3 }} >
       <Card >
         <CardContent>
-
+          <Typography variant='h3' margin={3} > Guardar nuevo Beneficiario </Typography>
           <Formik
             onSubmit={handleFormSubmit}
             initialValues={initialValues}

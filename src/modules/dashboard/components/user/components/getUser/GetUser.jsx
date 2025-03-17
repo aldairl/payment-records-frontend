@@ -3,7 +3,7 @@ import { Avatar, Box, Button, Card, CardContent, CardHeader, Divider, Typography
 import { red } from '@mui/material/colors'
 import { SearchField } from "../../../../../../components/SearchField"
 import { Loading } from '../../../../../../components/Loading'
-import { getLocalDate } from '../../../../../../utils/dateUtils'
+import { getLocalDate, numberFormatMiles } from '../../../../../../utils/dateUtils'
 export const GetUser = ({ onSearch, beneficiaries, identification, loading, error, gotToAddNew, selectBeneficiary }) => {
 
     const isNonMobile = useMediaQuery("(min-width:600px)")
@@ -30,10 +30,10 @@ export const GetUser = ({ onSearch, beneficiaries, identification, loading, erro
                 <>
                     <Divider sx={{ gridColumn: "span 3" }} >Beneficiario encontrado</Divider>
 
-                    {beneficiaries.map((beneficiary) => (
+                    {beneficiaries.map((beneficiary, index) => (
                         <Card 
                             onClick={() => selectBeneficiary(beneficiary)}
-                            key={beneficiary.identification}
+                            key={index}
                             sx={{
                                 maxWidth: 345,
                                 cursor: 'pointer'
@@ -62,7 +62,7 @@ export const GetUser = ({ onSearch, beneficiaries, identification, loading, erro
                                     Ultimo pago: { beneficiary.payments?.creation_date ? getLocalDate(beneficiary.payments?.creation_date): 'No registra' }
                                 </Typography>
                                 <Typography color='primary'>
-                                    Registrado en { beneficiary.box?.name || 'No registra' }
+                                    Registrado en { beneficiary.box?.name || 'No registra' } { numberFormatMiles(beneficiary.payments?.amount) }
                                 </Typography>
                                 <Typography color='textPrimary'>
                                     { beneficiary.concepts.map( ({details, month}) => `${details.name} ${month}` ) }
