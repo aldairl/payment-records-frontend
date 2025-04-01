@@ -73,8 +73,8 @@ export const CustomSidebar = ({ collapsed, toggled, hasImage, theme, menuItemSty
             </SubMenu>
 
             <SubMenu label="Beneficiarios" icon={<DiamondIcon />}>
-              <MenuItem> Grid</MenuItem>
-              <MenuItem> Layout</MenuItem>
+              <MenuItem component={ <Link to={{ pathname: '/dash/user/get-user', search:'?search=true' }} /> }>Consultar pagos</MenuItem>
+              <MenuItem> Layout </MenuItem>
               <SubMenu label="Forms">
                 <MenuItem> Input</MenuItem>
                 <MenuItem> Select</MenuItem>

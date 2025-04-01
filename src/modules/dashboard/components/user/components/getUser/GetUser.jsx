@@ -4,7 +4,7 @@ import { red } from '@mui/material/colors'
 import { SearchField } from "../../../../../../components/SearchField"
 import { Loading } from '../../../../../../components/Loading'
 import { getLocalDate, numberFormatMiles } from '../../../../../../utils/dateUtils'
-export const GetUser = ({ onSearch, beneficiaries, identification, loading, error, gotToAddNew, selectBeneficiary }) => {
+export const GetUser = ({ onSearch, beneficiaries, identification, loading, error, gotToAddNew, selectBeneficiary, isAdmin }) => {
 
     const isNonMobile = useMediaQuery("(min-width:600px)")
 
@@ -32,7 +32,7 @@ export const GetUser = ({ onSearch, beneficiaries, identification, loading, erro
 
                     {beneficiaries.map((beneficiary, index) => (
                         <Card 
-                            onClick={() => selectBeneficiary(beneficiary)}
+                            onClick={() => isAdmin ? selectBeneficiary(beneficiary): ''}
                             key={index}
                             sx={{
                                 maxWidth: 345,
@@ -97,4 +97,5 @@ GetUser.propTypes = {
     identification: PropTypes.string,
     error: PropTypes.string,
     loading: PropTypes.bool,
+    isAdmin: PropTypes.bool,
 }
