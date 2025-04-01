@@ -9,7 +9,7 @@ import { numberFormatMiles } from '../../../../../../utils/dateUtils'
 export const List = ({
   loading, error, handlerCloseBox, handlerNewBox, handlerNewPayment, boxes, years,
   handleChangeYearSelected, yearSelected, viewBoxPayments, dialogDelete,
-  handleDeleteBox, handlerCancelDelete, boxToDelete, handleConfirmBoxDelete, viewBoxBalance
+  handleDeleteBox, handlerCancelDelete, boxToDelete, handleConfirmBoxDelete, viewBoxBalance, isAdmin
 }) => {
 
   const isNonMobile = useMediaQuery("(min-width:600px)")
@@ -66,7 +66,7 @@ export const List = ({
           >
             <Box display='flex' justifyContent='space-between' p={1} >
               <Typography sx={{ cursor: 'pointer' }} variant='body1' color='success' onClick={() => viewBoxPayments(_id)} > Ver pagos </Typography>
-              <DeleteIcon sx={{ cursor: 'pointer' }} onClick={() => handleDeleteBox(_id, name)} />
+              { isAdmin && <DeleteIcon sx={{ cursor: 'pointer' }} onClick={() => handleDeleteBox(_id, name)} /> }
             </Box>
 
             <CardContent 
@@ -101,12 +101,12 @@ export const List = ({
 
             <CardActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
               {status === 'open' ?
-                <Button size="small" color='secondary' onClick={handlerCloseBox} >cerrar</Button>
+                <Button disabled={!isAdmin} size="small" color='secondary' onClick={handlerCloseBox} >cerrar</Button>
                 :
                 <Typography variant='body2' color={'textDisabled'}> Cerrada el {close_date} </Typography>
               }
 
-              <Button size="small" color='success' onClick={status === 'open' ? () => handlerNewPayment(_id) : null} >agregar nuevo pago</Button>
+              <Button disabled={!isAdmin} size="small" color='success' onClick={status === 'open' ? () => handlerNewPayment(_id) : null} >agregar nuevo pago</Button>
             </CardActions>
 
           </Card>
@@ -166,4 +166,5 @@ List.propTypes = {
   boxToDelete: PropTypes.object,
   handleConfirmBoxDelete: PropTypes.func,
   viewBoxBalance: PropTypes.func,
+  isAdmin: PropTypes.bool,
 }

@@ -23,6 +23,7 @@ export const CreateConceptContainer = () => {
     const dispatch = useDispatch()
     const [ resetFormAction, setResetFormAction ] = useState()
     const { loading, error, message } = useSelector(state => state.dash)
+    const { role } = useSelector(state => state.auth)
 
     const handleFormSubmit = (values, resetForm) => {
         dispatch(createConceptList(values))
@@ -49,8 +50,6 @@ export const CreateConceptContainer = () => {
       }
     
     }, [message, resetFormAction])
-    
-
 
     return (
         <CreateConcept
@@ -61,6 +60,7 @@ export const CreateConceptContainer = () => {
             error={error}
             message={message}
             onFocus={onFocus}
+            isAdmin={role === 'admin'}
         />
     )
 }

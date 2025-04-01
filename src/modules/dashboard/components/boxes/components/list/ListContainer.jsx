@@ -9,6 +9,7 @@ import { clean as cleanPayments } from '../../../payments/store/paymentSlice'
 
 export const ListContainer = () => {
   const { boxes, loading, error } = useSelector(state => state.box)
+  const { role } = useSelector(state => state.auth)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [boxLoaded, setBoxLoaded] = useState(false)
@@ -100,6 +101,7 @@ export const ListContainer = () => {
       boxToDelete={boxToDelete}
       handleConfirmBoxDelete={handleConfirmBoxDelete}
       viewBoxBalance={viewBoxBalance}
+      isAdmin={role === 'admin'}
     />
   )
 }

@@ -3,7 +3,7 @@ import { Box, Button, Card, CardContent, TextField, Typography, useMediaQuery } 
 import { Form, Formik } from "formik"
 import { Loading } from '../../../../../components/Loading'
 
-export const CreateConcept = ({ handleFormSubmit, initialValues, checkoutSchema, loading, error, message, onFocus }) => {
+export const CreateConcept = ({ handleFormSubmit, initialValues, checkoutSchema, loading, error, message, onFocus, isAdmin }) => {
     const isNonMobile = useMediaQuery("(min-width:600px)")
 
     return (
@@ -73,7 +73,7 @@ export const CreateConcept = ({ handleFormSubmit, initialValues, checkoutSchema,
                                 </Box>
 
                                 <Box display="flex" justifyContent="center" mt="20px">
-                                    <Button type="submit" color="info" variant="contained">
+                                    <Button disabled={ !isAdmin } type="submit" color="info" variant="contained">
                                         {loading ? <Loading /> : 'Crear concepto'}
                                     </Button>
                                 </Box>
@@ -105,4 +105,5 @@ CreateConcept.propTypes = {
     loading: PropTypes.bool,
     error: PropTypes.string,
     message: PropTypes.string,
+    isAdmin: PropTypes.bool,
 }
