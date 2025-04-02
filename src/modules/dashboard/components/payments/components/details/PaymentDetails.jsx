@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 import { Box, Card, CardContent, Typography, useMediaQuery } from '@mui/material'
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { numberFormatMiles } from '../../../../../../utils/dateUtils'
 import { Loading } from '../../../../../../components/Loading'
 
-export const PaymentDetails = ({ paymentList, loading, error }) => {
+export const PaymentDetails = ({ paymentList, loading, error, isAdmin, goToEdit }) => {
 
     const isNonMobile = useMediaQuery("(min-width:600px)")
 
@@ -30,18 +31,21 @@ export const PaymentDetails = ({ paymentList, loading, error }) => {
                         key={_id}
                         sx={{
                             minWidth: '200px',
-                            cursor: 'pointer',
                             gridColumn: 'span 1'
                         }}
                     >
 
-                        <CardContent
-                            sx={{ cursor: 'pointer' }}
-                        >
+                        <CardContent>
 
-                            <Typography color={type === 'income' ? 'success' : 'textDisabled'} gutterBottom sx={{ fontSize: 14, textAlign: 'end' }}>
-                                {type === 'income' ? 'Ingreso' : 'Gasto'}
-                            </Typography>
+                            <Box display='flex' justifyContent='space-between' >
+
+                                {isAdmin && <EditOutlinedIcon sx={{ cursor: "pointer" }} onClick = { () => goToEdit(_id) } />}
+
+                                <Typography color={type === 'income' ? 'success' : 'textDisabled'} gutterBottom sx={{ fontSize: 14, textAlign: 'end' }}>
+                                    {type === 'income' ? 'Ingreso' : 'Gasto'}
+                                </Typography>
+
+                            </Box>
 
                             <Box display='flex' justifyContent='space-between'>
                                 <Typography variant="h5" component="div" sx={{ fontSize: 18 }} color={type === 'income' ? 'primary' : 'textDisabled'}  >
@@ -81,4 +85,6 @@ PaymentDetails.propTypes = {
     paymentList: PropTypes.array,
     loading: PropTypes.bool,
     error: PropTypes.string,
+    isAdmin: PropTypes.bool,
+    goToEdit: PropTypes.func,
 }

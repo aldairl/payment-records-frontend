@@ -5,8 +5,8 @@ import { MONTHS, YEARS } from "../utils/months"
 import { useEffect, useState } from "react"
 import { getConceptList } from "../../../store/dashThunks"
 import { clean } from "../store/paymentSlice"
-import { useNavigate } from "react-router-dom"
-import { createPayment } from "../store/paytmentThunks"
+import { useNavigate, useParams } from "react-router-dom"
+import { createPayment, getPayment } from "../store/paytmentThunks"
 
 
 const checkoutSchema = yup.object().shape({
@@ -20,19 +20,19 @@ export const RegisterPaymentContainer = () => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const { paymentId } = useParams()
     const [resetFormAction, setResetFormAction] = useState()
-    const { payer, box, loading, paymentCreated } = useSelector(state => state.payment)
+    const { payer, box, loading, paymentCreated, paymentEdit } = useSelector(state => state.payment)
     const { beneficiarySelected } = useSelector(state => state.beneficiary)
     const { conceptList } = useSelector(state => state.dash)
     const { boxes } = useSelector(state => state.box)
     const [openDialog, setOpenDialog] = useState(false)
-
-    const initialValues = {
+    const [initialValues, setInitialValues] = useState({
         payer,
         box,
         type: 'income',
         concepts: []
-    }
+    })
 
     const handleFormSubmit = (values, resetForm) => {
         console.log(values)
@@ -48,7 +48,7 @@ export const RegisterPaymentContainer = () => {
     const handleCloseDialog = () => {
         console.log(paymentCreated)
         setOpenDialog(false)
-        if(resetFormAction){
+        if (resetFormAction) {
             resetFormAction()
         }
     }
@@ -73,11 +73,25 @@ export const RegisterPaymentContainer = () => {
     }, [paymentCreated])
 
     useEffect(() => {
-        if (!payer) {
+        if (!payer && !paymentId) {
             navigate('/dash/user/get-user')
         }
 
     }, [payer, navigate])
+
+    useEffect(() => {
+        if (paymentId) {
+            dispatch(getPayment(paymentId))
+        }
+    }, [paymentId, dispatch])
+
+
+    useEffect(() => {
+        if (paymentEdit) {
+            const newValues = { box: paymentEdit.box, payer: paymentEdit.payer, type: paymentEdit.type }
+            setInitialValues( currentValues => ({ ...currentValues, ...newValues }))
+        }
+    }, [paymentEdit])
 
     return (
         <RegisterPayment

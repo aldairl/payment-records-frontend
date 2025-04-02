@@ -1,6 +1,6 @@
 import { VITE_API_URL } from "../../../../../config/variables"
 import { fetchData } from "../../../../../utils/fetch-request"
-import { setError, setLoading, setPaymentCreated } from "./paymentSlice"
+import { setError, setLoading, setPaymentCreated, setPaymentEdit } from "./paymentSlice"
 
 export const createPayment = ({ box, concepts, payer, type, amount }) => {
     return async (dispatch) => {
@@ -39,5 +39,35 @@ export const createPayment = ({ box, concepts, payer, type, amount }) => {
             dispatch(setLoading(false))
         }
 
+    }
+}
+
+export const getPayment = (paymentId) => {
+    return async (dispatch) => {
+            
+            dispatch(setLoading(true))
+    
+            const url = `${VITE_API_URL}/payments/${paymentId}`
+    
+            const options = {
+                method: 'GET'
+            }
+    
+            try {
+    
+                const { body, success } = await fetchData(url, options)
+    
+                if (!success) {
+                    throw new Error(body.error)
+                }
+                dispatch(setPaymentEdit(body))
+    
+            } catch (error) {
+                console.log(":(", error)
+                dispatch(setError(error.message || String(error)))
+            }
+            finally {
+                dispatch(setLoading(false))
+            }
     }
 }

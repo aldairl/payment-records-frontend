@@ -21,6 +21,7 @@ export const RegisterPayment = ({
                         onSubmit={(values, { resetForm }) => handleFormSubmit(values, resetForm)}
                         initialValues={initialValues}
                         validationSchema={checkoutSchema}
+                        enableReinitialize={true}
                     >
                         {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
                             <Form onSubmit={handleSubmit}>
@@ -39,7 +40,7 @@ export const RegisterPayment = ({
                                         label="Nombre"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        value={beneficiarySelected.name}
+                                        value={beneficiarySelected.name || values.payer}
                                         name="payer"
                                         error={!!touched.payer && !!errors.payer}
                                         helperText={touched.payer && errors.payer}
