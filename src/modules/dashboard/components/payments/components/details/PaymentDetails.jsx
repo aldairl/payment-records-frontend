@@ -62,14 +62,12 @@ export const PaymentDetails = ({ paymentList, loading, error, isAdmin, goToEdit 
                             </Typography>
 
                             <Typography variant="body2">
-                                {concepts}
+                                {concepts} { [...new Set(months.split(', '))] }
                             </Typography>
-                            <Typography variant="body2">
-                                {months}
-                            </Typography>
+                            {/* <Typography variant="body2"></Typography> */}
 
                             <Typography variant="body2">
-                                {amounts.split(',').length > 1 ? amounts : ''}
+                                {amounts.split(',').length >= 1 ? amounts : ''}
                             </Typography>
 
                         </CardContent>

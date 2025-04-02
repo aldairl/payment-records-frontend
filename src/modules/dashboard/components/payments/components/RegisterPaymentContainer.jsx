@@ -35,10 +35,15 @@ export const RegisterPaymentContainer = () => {
     })
 
     const handleFormSubmit = (values, resetForm) => {
-        console.log(values)
         const amount = values.concepts.reduce((total, current) => total + current.amount, 0)
         const newPayment = { ...values, amount }
-        dispatch(createPayment(newPayment))
+
+        if (paymentId) {
+            // edit the payment
+            console.log(values)
+        }else{
+            dispatch(createPayment(newPayment))
+        }
 
         if (!resetFormAction) {
             setResetFormAction(resetForm)
@@ -88,7 +93,7 @@ export const RegisterPaymentContainer = () => {
 
     useEffect(() => {
         if (paymentEdit) {
-            const newValues = { box: paymentEdit.box, payer: paymentEdit.payer, type: paymentEdit.type }
+            const newValues = { box: paymentEdit.box._id, payer: paymentEdit.payer._id, type: paymentEdit.type, concepts: paymentEdit.concepts }
             setInitialValues( currentValues => ({ ...currentValues, ...newValues }))
         }
     }, [paymentEdit])
@@ -102,12 +107,13 @@ export const RegisterPaymentContainer = () => {
             months={MONTHS}
             years={YEARS()}
             boxes={boxes}
-            beneficiarySelected={beneficiarySelected}
+            beneficiarySelected={beneficiarySelected || paymentEdit?.payer}
             loading={loading}
             paymentCreated={paymentCreated}
             handleClose={handleCloseDialog}
             openDialog={openDialog}
             handleNewPayment={handleNewPayment}
+            isEditing={!!paymentId}
         />
     )
 }

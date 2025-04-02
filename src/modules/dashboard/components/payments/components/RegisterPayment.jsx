@@ -10,7 +10,7 @@ import { numberFormatMiles } from '../../../../../utils/dateUtils';
 
 export const RegisterPayment = ({
     handleFormSubmit, initialValues, checkoutSchema, conceptList, months, years,boxes,
-    beneficiarySelected, loading, paymentCreated, handleClose, openDialog, handleNewPayment
+    beneficiarySelected, loading, paymentCreated, handleClose, openDialog, handleNewPayment, isEditing
 }) => {
     const isNonMobile = useMediaQuery("(min-width:600px)")
     return (
@@ -40,7 +40,7 @@ export const RegisterPayment = ({
                                         label="Nombre"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        value={beneficiarySelected.name || values.payer}
+                                        value={beneficiarySelected.name}
                                         name="payer"
                                         error={!!touched.payer && !!errors.payer}
                                         helperText={touched.payer && errors.payer}
@@ -52,7 +52,7 @@ export const RegisterPayment = ({
                                         fullWidth
                                         variant="outlined"
                                         type="text"
-                                        label="caja"
+                                        label="Caja"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         value={(boxes.find(({ _id }) => _id === values.box)?.name)}
@@ -235,7 +235,7 @@ export const RegisterPayment = ({
 
                                         <Typography variant='h3' color='success' > Total pago {numberFormatMiles(values.concepts.reduce((total, current) => total + current.amount, 0))} </Typography>
                                         <Button disabled={loading} type="submit" color="success" variant="contained">
-                                            {!loading ? 'Guardar pago' : <Loading color='white' />}
+                                            {!loading ? isEditing ? 'Editar pago' :'Guardar pago' : <Loading color='white' />}
                                         </Button>
                                     </Box>
                                 }
@@ -294,4 +294,5 @@ RegisterPayment.propTypes = {
     paymentCreated: PropTypes.object,
     handleClose: PropTypes.func,
     handleNewPayment: PropTypes.func,
+    isEditing: PropTypes.bool,
 }
