@@ -19,7 +19,6 @@ export const getBoxes = (year = 2025) => {
     }
 }
 
-
 export const deleteBox = (boxId) => {
     return async (dispatch) => {
         dispatch(setLoading(true))
@@ -105,6 +104,31 @@ export const getBalanceByBox = (boxId) => {
                 return dispatch(setError(body.error))
             }
             dispatch(setBoxBalance(body))
+        } catch (error) {
+            dispatch(setError(error.message || String(error)))
+        } finally {
+            dispatch(setLoading(false))
+        }
+    }
+}
+
+export const updateBox = (newInfo) => {
+    return async (dispatch) => {
+        dispatch(setLoading(true))
+
+        const url = `${VITE_API_URL}/box`
+
+        const body = newInfo
+
+        const options = {
+            method: 'PUT',
+            body
+        }
+
+        try {
+            const { body } = await fetchData(url, options)
+            dispatch(removeBox(newInfo._id))
+            dispatch(addBox(body))
         } catch (error) {
             dispatch(setError(error.message || String(error)))
         } finally {

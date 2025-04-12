@@ -83,7 +83,7 @@ export const List = ({
                 >
                   {name.toUpperCase()}
                 </Typography>
-                <Typography variant="h5" component="div" sx={{ fontSize: 18 }} color={status === 'open' ? 'primary' : 'textDisabled'} >
+                <Typography variant="h5" component="div" sx={{ fontSize: 18 }} color={cashflow?.total_balance < 0 ? 'error' : 'primary'} >
                   {numberFormatMiles(cashflow?.total_balance)}
                 </Typography>
 

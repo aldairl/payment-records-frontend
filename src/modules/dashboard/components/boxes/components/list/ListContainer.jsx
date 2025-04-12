@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { List } from './List'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteBox, getBoxes, getPaymentDetailsByBox } from '../../store/thunks'
+import { deleteBox, getBoxes, getPaymentDetailsByBox, updateBox } from '../../store/thunks'
 import { useNavigate } from 'react-router-dom'
 import { setBox } from '../../../payments/store/paymentSlice'
 import { clean } from '../../../user/storage/beneficiarySlice'
@@ -22,6 +22,7 @@ export const ListContainer = () => {
 
   const handlerCloseBox = () => {
     console.log('cerrar caja')
+    // dispatch(updateBox())
   }
 
   const handlerNewBox = () => {
