@@ -10,6 +10,7 @@ const initialState = {
     error: '',
     paymentCreated: null,
     paymentEdit: null,
+    message: ''
 }
 
 export const paymentSlice = createSlice({
@@ -53,4 +54,7 @@ export const paymentSlice = createSlice({
     }
 })
 
-export const { setLoading, setError, setPayer, setBox, setType, addConcept, clean, removeItem, setPaymentCreated, setPaymentEdit } = paymentSlice.actions
+export const { 
+    setLoading, setError, setPayer, setBox, setType, addConcept, clean, 
+    removeItem, setPaymentCreated, setPaymentEdit, setMessage
+} = paymentSlice.actions

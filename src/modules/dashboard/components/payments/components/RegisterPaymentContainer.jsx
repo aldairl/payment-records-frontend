@@ -6,7 +6,8 @@ import { useEffect, useState } from "react"
 import { getConceptList } from "../../../store/dashThunks"
 import { clean } from "../store/paymentSlice"
 import { useNavigate, useParams } from "react-router-dom"
-import { createPayment, editPayment, getPayment } from "../store/paytmentThunks"
+import { createPayment, deletePaymentConcept, editPayment, getPayment } from "../store/paytmentThunks"
+import { setConceptList } from "../../../store/dashSlice"
 
 
 const checkoutSchema = yup.object().shape({
@@ -27,6 +28,8 @@ export const RegisterPaymentContainer = () => {
     const { conceptList } = useSelector(state => state.dash)
     const { boxes } = useSelector(state => state.box)
     const [openDialog, setOpenDialog] = useState(false)
+    const [openDialogDeleteConcept, setOpenDialogDeleteConcept] = useState(false)
+    const [conceptToDelete, setconCeptToDelete] = useState(null)
     const [initialValues, setInitialValues] = useState({
         payer,
         box,
@@ -40,7 +43,8 @@ export const RegisterPaymentContainer = () => {
 
         if (paymentId) {
             dispatch(editPayment(paymentId, newPayment))
-        }else{
+            // console.log(newPayment)
+        } else {
             dispatch(createPayment(newPayment))
         }
 
@@ -60,6 +64,31 @@ export const RegisterPaymentContainer = () => {
     const handleNewPayment = () => {
         dispatch(clean())
         navigate('/dash/user/get-user')
+    }
+
+    const confirmDeletePropToConcept = () => {
+        // dispatch(deletePaymentConcept(conceptToDelete._id))
+        // update concept in edit payment and set prop deleleted to true
+        const newConcepts = paymentEdit.concepts.map(concept => {
+            if (concept._id === conceptToDelete._id) {
+                return { ...concept, deleted: true, amount: 0 }
+            }
+            return concept
+        })
+        // paymentEdit.concepts = newConcepts
+        setInitialValues(currentValues => ({ ...currentValues, concepts: newConcepts }))
+        // console.log(paymentEdit)
+        cancelDeleteConceptDialog()
+    }
+
+    const showDeleteConceptDialog = (concept) => {
+        setOpenDialogDeleteConcept(true)
+        setconCeptToDelete(concept)
+    }
+
+    const cancelDeleteConceptDialog = () => {
+        setOpenDialogDeleteConcept(false)
+        setconCeptToDelete(null)
     }
 
     useEffect(() => {
@@ -93,7 +122,7 @@ export const RegisterPaymentContainer = () => {
     useEffect(() => {
         if (paymentEdit) {
             const newValues = { box: paymentEdit.box._id, payer: paymentEdit.payer._id, type: paymentEdit.type, concepts: paymentEdit.concepts }
-            setInitialValues( currentValues => ({ ...currentValues, ...newValues }))
+            setInitialValues(currentValues => ({ ...currentValues, ...newValues }))
         }
     }, [paymentEdit])
 
@@ -113,6 +142,11 @@ export const RegisterPaymentContainer = () => {
             openDialog={openDialog}
             handleNewPayment={handleNewPayment}
             isEditing={!!paymentId}
+            confirmDeletePropToConcept={confirmDeletePropToConcept}
+            openDialogDeleteConcept={openDialogDeleteConcept}
+            conceptToDelete={conceptToDelete}
+            showDeleteConceptDialog={showDeleteConceptDialog}
+            cancelDeleteConceptDialog={cancelDeleteConceptDialog}
         />
     )
 }

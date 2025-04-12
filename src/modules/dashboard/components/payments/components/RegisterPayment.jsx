@@ -6,16 +6,18 @@ import { FieldArray, Form, Formik } from "formik"
 import { Loading } from '../../../../../components/Loading';
 import { ShowPayment } from './list/ShowPayment';
 import { numberFormatMiles } from '../../../../../utils/dateUtils';
+import { ShowDialog } from '../../../../../components/ShowDialog';
 
 
 export const RegisterPayment = ({
-    handleFormSubmit, initialValues, checkoutSchema, conceptList, months, years,boxes,
-    beneficiarySelected, loading, paymentCreated, handleClose, openDialog, handleNewPayment, isEditing
+    handleFormSubmit, initialValues, checkoutSchema, conceptList, months, years, boxes,
+    beneficiarySelected, loading, paymentCreated, handleClose, openDialog, handleNewPayment, isEditing,
+    showDeleteConceptDialog, openDialogDeleteConcept, conceptToDelete, confirmDeletePropToConcept, cancelDeleteConceptDialog
 }) => {
     const isNonMobile = useMediaQuery("(min-width:600px)")
     return (
         <Box sx={{ padding: 3 }} >
-            { loading && <Loading /> }
+            {loading && <Loading />}
             <Card >
                 <CardContent>
                     <Formik
@@ -95,7 +97,7 @@ export const RegisterPayment = ({
                                     {({ remove, push }) => (
                                         <>
                                             {
-                                                values.concepts.map((concept, index) => (
+                                                values.concepts.map((concept, index) => ( concept.amount > 0 &&
                                                     <Box
                                                         key={index}
                                                         display='grid'
@@ -156,7 +158,7 @@ export const RegisterPayment = ({
                                                                 ))
                                                             }
                                                         </TextField>
-                                                        
+
                                                         <TextField
                                                             fullWidth
                                                             variant="outlined"
@@ -174,7 +176,7 @@ export const RegisterPayment = ({
                                                             }}
                                                         >
                                                             {
-                                                                years.map(({name}, index) => (
+                                                                years.map(({ name }, index) => (
                                                                     <MenuItem key={index} value={name} selected={(index === 0)} >
                                                                         {name}
                                                                     </MenuItem>
@@ -198,15 +200,20 @@ export const RegisterPayment = ({
                                                                 }
                                                             }}
                                                         />
-                                                        
+
                                                         <Box display="flex" justifyContent="center">
 
                                                             <Button
                                                                 sx={{ gridColumn: "span 1", }}
                                                                 color='error'
-                                                                onClick={() => remove(index)}
+                                                                onClick={() => {
+                                                                    if (concept._id) {
+                                                                        showDeleteConceptDialog(concept)
+                                                                    }
+                                                                    // remove(index)
+                                                                }}
                                                             >
-                                                                Eliminar <DeleteIcon />
+                                                                Eliminar {loading ? <Loading color='white' /> : <DeleteIcon titleAccess='Eliminar' />}
                                                             </Button>
                                                         </Box>
 
@@ -236,7 +243,7 @@ export const RegisterPayment = ({
 
                                         <Typography variant='h3' color='success' > Total pago {numberFormatMiles(values.concepts.reduce((total, current) => total + current.amount, 0))} </Typography>
                                         <Button disabled={loading} type="submit" color="success" variant="contained">
-                                            {!loading ? isEditing ? 'Editar pago' :'Guardar pago' : <Loading color='white' />}
+                                            {!loading ? isEditing ? 'Editar pago' : 'Guardar pago' : <Loading color='white' />}
                                         </Button>
                                     </Box>
                                 }
@@ -254,7 +261,7 @@ export const RegisterPayment = ({
                             Pago registrado correctamente
                         </DialogTitle>
                         <DialogContent>
-                                <ShowPayment paymentCreated={paymentCreated} />
+                            <ShowPayment paymentCreated={paymentCreated} />
                         </DialogContent>
                         <DialogActions>
                             <Button autoFocus onClick={handleClose} color='primary' >
@@ -264,6 +271,13 @@ export const RegisterPayment = ({
                         </DialogActions>
                     </Dialog>
 
+                    <ShowDialog
+                        open={openDialogDeleteConcept}
+                        onClose={ cancelDeleteConceptDialog }
+                        onConfirm={confirmDeletePropToConcept}
+                        title={`¿Eliminar el concepto ${conceptToDelete?.name} por el valor de ${conceptToDelete?.amount}?`}
+                        warning={`El concepto se elimina de base de datos.`}
+                    />
                 </CardContent>
             </Card>
 
@@ -295,5 +309,10 @@ RegisterPayment.propTypes = {
     paymentCreated: PropTypes.object,
     handleClose: PropTypes.func,
     handleNewPayment: PropTypes.func,
+    showDeleteConceptDialog: PropTypes.func,
     isEditing: PropTypes.bool,
+    openDialogDeleteConcept: PropTypes.bool,
+    conceptToDelete: PropTypes.object,
+    confirmDeletePropToConcept: PropTypes.func,
+    cancelDeleteConceptDialog: PropTypes.func,
 }

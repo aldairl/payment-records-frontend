@@ -127,12 +127,42 @@ export const deletePayment = (paymentId) => {
 
         try {
 
-            const { success } = await fetchData(url, options)
+            const { success, body } = await fetchData(url, options)
 
             if (!success) {
                 throw new Error(body.error)
             }
             dispatch(dispatch(removePayment(paymentId)))
+
+        } catch (error) {
+            console.log(":(", error)
+            dispatch(setError(error.message || String(error)))
+        }
+        finally {
+            dispatch(setLoading(false))
+        }
+
+    }
+}
+
+export const deletePaymentConcept = (paymentConceptId) => {
+    return async (dispatch) => {
+
+        dispatch(setLoading(true))
+
+        const url = `${VITE_API_URL}/paymentConcepts/${paymentConceptId}`
+
+        const options = {
+            method: 'DELETE',
+        }
+
+        try {
+
+            const { body, success } = await fetchData(url, options)
+
+            if (!success) {
+                throw new Error(body.error)
+            }
 
         } catch (error) {
             console.log(":(", error)
