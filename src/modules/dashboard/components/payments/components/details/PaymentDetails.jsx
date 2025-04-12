@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types'
-import { Box, Card, CardContent, Typography, useMediaQuery } from '@mui/material'
+import { Box, Card, CardContent, Dialog, DialogContent, DialogContentText, DialogTitle, Typography, useMediaQuery } from '@mui/material'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { numberFormatMiles } from '../../../../../../utils/dateUtils'
 import { Loading } from '../../../../../../components/Loading'
+import { ShowDialog } from '../../../../../../components/ShowDialog';
 
-export const PaymentDetails = ({ paymentList, loading, error, isAdmin, goToEdit }) => {
+export const PaymentDetails = ({ paymentList, loading, error, isAdmin, goToEdit, handleDeletePayment, dialogDelete, handlerCancelDelete, handleConfirmPaymentDelete, paymentToDelete }) => {
 
     const isNonMobile = useMediaQuery("(min-width:600px)")
 
@@ -38,12 +40,14 @@ export const PaymentDetails = ({ paymentList, loading, error, isAdmin, goToEdit 
                         <CardContent>
 
                             <Box display='flex' justifyContent='space-between' >
-
-                                {isAdmin && <EditOutlinedIcon sx={{ cursor: "pointer" }} onClick = { () => goToEdit(_id) } />}
-
                                 <Typography color={type === 'income' ? 'success' : 'textDisabled'} gutterBottom sx={{ fontSize: 14, textAlign: 'end' }}>
                                     {type === 'income' ? 'Ingreso' : 'Gasto'}
                                 </Typography>
+
+                                <Box display='flex' justifyContent='space-between' gap={1} >
+                                    {isAdmin && <EditOutlinedIcon sx={{ cursor: "pointer" }} onClick={() => goToEdit(_id)} />}
+                                    {isAdmin && <DeleteIcon sx={{ cursor: 'pointer' }} onClick={() => handleDeletePayment(_id, amount)} />}
+                                </Box>
 
                             </Box>
 
@@ -62,7 +66,7 @@ export const PaymentDetails = ({ paymentList, loading, error, isAdmin, goToEdit 
                             </Typography>
 
                             <Typography variant="body2">
-                                {concepts} { [...new Set(months.split(', '))] }
+                                {concepts} {[...new Set(months.split(', '))]}
                             </Typography>
                             {/* <Typography variant="body2"></Typography> */}
 
@@ -75,6 +79,13 @@ export const PaymentDetails = ({ paymentList, loading, error, isAdmin, goToEdit 
                 ))
             }
 
+            <ShowDialog
+                title={`¿Desea eliminar el pago por un valor de ${paymentToDelete?.amount}?`}
+                warning={`Esta acción no se puede deshacer`}
+                open={dialogDelete}
+                handleClose={handlerCancelDelete}
+                onConfirm={handleConfirmPaymentDelete}
+            />
         </Box>
     )
 }
@@ -85,4 +96,9 @@ PaymentDetails.propTypes = {
     error: PropTypes.string,
     isAdmin: PropTypes.bool,
     goToEdit: PropTypes.func,
+    handleDeletePayment: PropTypes.func,
+    handlerCancelDelete: PropTypes.func,
+    handleConfirmPaymentDelete: PropTypes.func,
+    dialogDelete: PropTypes.bool,
+    paymentToDelete: PropTypes.object,
 }

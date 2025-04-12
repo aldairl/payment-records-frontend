@@ -41,6 +41,11 @@ export const boxSlice = createSlice({
             state.error = ''
             state.boxes = state.boxes.filter(box => box._id !== payload)
         },
+        removePayment: (state, { payload }) => {
+            state.loading = false
+            state.error = ''
+            state.boxPayments = state.boxPayments.filter(payment => payment._id !== payload)
+        },
         cleanBoxVariables: (state) => {
             state.loading = false
             state.error = ''
@@ -65,4 +70,4 @@ export const boxSlice = createSlice({
     }
 })
 
-export const { setBoxes, setYears, setLoading, setError, cleanBox, removeBox, cleanBoxVariables, addBox, setBoxPayments, setBoxBalance } = boxSlice.actions
+export const { setBoxes, setYears, setLoading, setError, cleanBox, removeBox, cleanBoxVariables, addBox, setBoxPayments, setBoxBalance, removePayment } = boxSlice.actions
