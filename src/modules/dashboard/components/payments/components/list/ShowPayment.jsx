@@ -15,7 +15,7 @@ export const ShowPayment = ({ paymentCreated }) => {
     const { username } = useSelector(state => state.auth)
 
     const rows = [
-        createData('Beneficiario', beneficiarySelected.name),
+        createData('Beneficiario', beneficiarySelected.name || paymentCreated.payer),
         createData('Registrado en caja ', (boxes.find(({ _id }) => _id === paymentCreated.box)?.name)),
         createData('Recibido por ', username),
         createData('Valor del pago', paymentCreated.amount),

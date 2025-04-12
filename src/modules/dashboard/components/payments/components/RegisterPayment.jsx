@@ -15,6 +15,7 @@ export const RegisterPayment = ({
     const isNonMobile = useMediaQuery("(min-width:600px)")
     return (
         <Box sx={{ padding: 3 }} >
+            { loading && <Loading /> }
             <Card >
                 <CardContent>
                     <Formik
@@ -40,7 +41,7 @@ export const RegisterPayment = ({
                                         label="Nombre"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        value={beneficiarySelected.name}
+                                        value={beneficiarySelected?.name}
                                         name="payer"
                                         error={!!touched.payer && !!errors.payer}
                                         helperText={touched.payer && errors.payer}

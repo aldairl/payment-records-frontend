@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import { getConceptList } from "../../../store/dashThunks"
 import { clean } from "../store/paymentSlice"
 import { useNavigate, useParams } from "react-router-dom"
-import { createPayment, getPayment } from "../store/paytmentThunks"
+import { createPayment, editPayment, getPayment } from "../store/paytmentThunks"
 
 
 const checkoutSchema = yup.object().shape({
@@ -39,8 +39,7 @@ export const RegisterPaymentContainer = () => {
         const newPayment = { ...values, amount }
 
         if (paymentId) {
-            // edit the payment
-            console.log(values)
+            dispatch(editPayment(paymentId, newPayment))
         }else{
             dispatch(createPayment(newPayment))
         }
