@@ -20,7 +20,6 @@ export const GetUserContainer = () => {
     const navigate = useNavigate()
 
     const onSearch = (identification) => {
-        console.log(identification)
         setIdentification(identification)
         dispatch(getLastBeneficiaryPayment(identification))
     }

@@ -4,7 +4,9 @@ import { dashSlice } from "../modules/dashboard/store/dashSlice";
 import { paymentSlice } from "../modules/dashboard/components/payments/store/paymentSlice";
 import { boxSlice } from "../modules/dashboard/components/boxes/store/boxSlice";
 import storage from "redux-persist/lib/storage"
-import { persistReducer, persistStore } from "redux-persist"
+import {
+    persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER,
+} from "redux-persist"
 import { beneficiarySlice } from "../modules/dashboard/components/user/storage/beneficiarySlice";
 
 const persistAuthConfig = { key: "root", storage, }
@@ -17,7 +19,13 @@ export const store = configureStore({
         payment: paymentSlice.reducer,
         box: boxSlice.reducer,
         beneficiary: beneficiarySlice.reducer
-    }
+    },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        }),
 })
 
 export const authPersistor = persistStore(store)

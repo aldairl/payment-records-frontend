@@ -23,3 +23,10 @@ build dist
 ```bash
 npm run build
 ```
+
+## deploy with firebase
+
+1. config env vars
+2. create a build
+3. firebase login (if not legged before)
+4. firebase deploy

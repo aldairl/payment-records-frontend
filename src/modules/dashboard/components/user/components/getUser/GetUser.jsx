@@ -18,7 +18,8 @@ export const GetUser = ({ onSearch, beneficiaries, identification, loading, erro
                 padding: 2
             }}
         >
-            <Typography variant="h3" >Buscar usuario</Typography>
+            <Typography variant="h3">Buscar usuario</Typography>
+
             <SearchField sx={{ gridColumn: 'span 3' }} onSearch={onSearch} />
 
             {loading && <Loading />}
@@ -31,8 +32,8 @@ export const GetUser = ({ onSearch, beneficiaries, identification, loading, erro
                     <Divider sx={{ gridColumn: "span 3" }} >Beneficiario encontrado</Divider>
 
                     {beneficiaries.map((beneficiary, index) => (
-                        <Card 
-                            onClick={() => isAdmin ? selectBeneficiary(beneficiary): ''}
+                        <Card
+                            onClick={() => isAdmin ? selectBeneficiary(beneficiary) : ''}
                             key={index}
                             sx={{
                                 maxWidth: 345,
@@ -41,7 +42,7 @@ export const GetUser = ({ onSearch, beneficiaries, identification, loading, erro
                         >
                             <CardHeader
                                 avatar={
-                                    <Avatar 
+                                    <Avatar
                                         aria-label="recipe"
                                         sx={{ bgcolor: red[500] }}
                                     >
@@ -50,6 +51,11 @@ export const GetUser = ({ onSearch, beneficiaries, identification, loading, erro
                                 }
                                 title={`${beneficiary.name} ${beneficiary.lastname ?? ''}`}
                                 subheader={beneficiary.identification}
+                                action={
+                                    <Typography color={beneficiary.payments?.type === 'income' ? 'success' : 'textDisabled'} gutterBottom sx={{ fontSize: 14, textAlign: 'end' }}>
+                                        {beneficiary.payments?.type === 'income' ? 'Ingreso' : 'Gasto'}
+                                    </Typography>
+                                }
                             />
                             <CardContent>
                                 <Typography color='success' >
@@ -59,14 +65,28 @@ export const GetUser = ({ onSearch, beneficiaries, identification, loading, erro
                                     Celular: {beneficiary.cellphone}
                                 </Typography>
                                 <Typography color='primary'>
-                                    Ultimo pago: { beneficiary.payments?.creation_date ? getLocalDate(beneficiary.payments?.creation_date): 'No registra' }
+                                    Ultimo pago: {beneficiary.payments?.creation_date ? getLocalDate(beneficiary.payments?.creation_date) : 'No registra'}
                                 </Typography>
-                                <Typography color='primary'>
-                                    Registrado en { beneficiary.box?.name || 'No registra' } { numberFormatMiles(beneficiary.payments?.amount) }
-                                </Typography>
-                                <Typography color='textPrimary'>
-                                    { beneficiary.concepts.map( ({details, month}) => `${details.name} ${month}` ) }
-                                </Typography>
+
+                                <>
+                                    <Typography color='primary' component={'span'} >
+                                        Registrado en {beneficiary.box?.name || 'No registra'}
+                                    </Typography>
+
+                                    <Typography color={beneficiary.payments?.type === 'income' ? 'success' : 'error'} component={'span'} marginLeft={1} >
+                                        {numberFormatMiles(beneficiary.payments?.amount)}
+                                    </Typography>
+                                </>
+                                <ul>
+                                    {beneficiary.concepts.map(({ details, month }, index) =>
+                                        <li key={index} >
+                                            {details.name} {month}
+                                            <Typography color={beneficiary.payments?.type === 'expense' ? 'error' : ''} component={'span'} marginLeft={1} >
+                                                {beneficiary.payments?.type === 'expense' ? 'Gasto' : ''}
+                                            </Typography>
+                                        </li>
+                                    )}
+                                </ul>
 
                             </CardContent>
                         </Card>

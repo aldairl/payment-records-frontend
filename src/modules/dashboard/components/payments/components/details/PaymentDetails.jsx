@@ -68,7 +68,6 @@ export const PaymentDetails = ({ paymentList, loading, error, isAdmin, goToEdit,
                             <Typography variant="body2">
                                 {concepts} {[...new Set(months.split(', '))]}
                             </Typography>
-                            {/* <Typography variant="body2"></Typography> */}
 
                             <Typography variant="body2">
                                 {amounts.split(',').length >= 1 ? amounts : ''}
