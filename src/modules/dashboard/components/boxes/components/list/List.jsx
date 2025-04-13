@@ -66,10 +66,10 @@ export const List = ({
           >
             <Box display='flex' justifyContent='space-between' p={1} >
               <Typography sx={{ cursor: 'pointer' }} variant='body1' color='success' onClick={() => viewBoxPayments(_id)} > Ver pagos </Typography>
-              { isAdmin && <DeleteIcon sx={{ cursor: 'pointer' }} onClick={() => handleDeleteBox(_id, name)} /> }
+              {isAdmin && <DeleteIcon sx={{ cursor: 'pointer' }} onClick={() => handleDeleteBox(_id, name)} />}
             </Box>
 
-            <CardContent 
+            <CardContent
               onClick={() => viewBoxBalance(_id)}
             >
 
@@ -117,17 +117,21 @@ export const List = ({
         boxes.length === 0 && <Typography color='info' > No hay cajas registradas para el año {yearSelected} </Typography>
       }
 
-      <Card
-        sx={{
-          gridColumn: "span 1", display: "flex", alignItems: "center", justifyContent: "center",
-          minHeight: 150, "&:hover": { boxShadow: 6 }, cursor: 'pointer'
-        }}
-        onClick={handlerNewBox}
-      >
-        <CardContent>
-          <AddIcon color='success' sx={{ fontSize: 40 }} />
-        </CardContent>
-      </Card>
+      {
+        isAdmin
+        &&
+        <Card
+          sx={{
+            gridColumn: "span 1", display: "flex", alignItems: "center", justifyContent: "center",
+            minHeight: 150, "&:hover": { boxShadow: 6 }, cursor: 'pointer'
+          }}
+          onClick={handlerNewBox}
+        >
+          <CardContent>
+            <AddIcon color='success' sx={{ fontSize: 40 }} />
+          </CardContent>
+        </Card>
+      }
 
       <Dialog
         open={dialogDelete}
